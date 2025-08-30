@@ -9,8 +9,10 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repo
+      - name: Checkout repo with PAT
         uses: actions/checkout@v3
+        with:
+          token: ${{ secrets.GH_PAT }}
 
       - name: Set up Python
         uses: actions/setup-python@v4
@@ -23,16 +25,13 @@ jobs:
       - name: Run script
         run: python generate_html.py
 
-      - name: Force authenticated push
+      - name: Commit and push changes
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+          git add wspr_pd8gb.html
+          git diff --cached --quiet || git commit -m "Update WSPR HTML"
+          git push
         env:
           GH_PAT: ${{ secrets.GH_PAT }}
-        run: |
-         git config user.name "github-actions"
-         git config user.email "github-actions@github.com"
-         git remote set-url origin https://x-access-token:${GH_PAT}@github.com/andremijnbox-cpu/WSPR-PD8GB.git
-         git fetch origin
-         git checkout main
-         git add wspr_pd8gb.html
-         git diff --cached --quiet || git commit -m "Update WSPR HTML"
-         git push origin main
 
