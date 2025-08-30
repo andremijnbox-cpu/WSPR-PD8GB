@@ -23,12 +23,12 @@ jobs:
       - name: Run script
         run: python generate_html.py
 
-      - name: Commit changes
+      - name: Commit and push changes
         env:
           GH_PAT: ${{ secrets.GH_PAT }}
         run: |
           git config user.name "github-actions"
           git config user.email "github-actions@github.com"
           git add wspr_pd8gb.html
-          git commit -m "Update WSPR HTML" || echo "Geen wijzigingen om te committen"
+          git diff --cached --quiet || git commit -m "Update WSPR HTML"
           git push https://x-access-token:${GH_PAT}@github.com/andremijnbox-cpu/WSPR-PD8GB.git HEAD:main
