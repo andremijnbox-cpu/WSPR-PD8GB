@@ -18,7 +18,7 @@ rows = []
 for line in soup.get_text().splitlines():
     if "PD8GB" in line and line.strip():
         parts = line.split()
-        if len(parts) >= 13:
+        if len(parts) >= 11:
             tijd      = parts[0] + " " + parts[1]      # Datum + Tijd
             freq      = parts[2]                       # Frequentie
             snr       = parts[3]                       # SNR
