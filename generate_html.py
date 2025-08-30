@@ -14,18 +14,18 @@ url = "https://www.wsprnet.org/olddb?mode=html&band=all&limit=50&findcall=PD8GB&
 response = requests.get(url)
 soup = BeautifulSoup(response.text, 'html.parser')
 
-# 🔍 Verwerk de tekstregels
 rows = []
 for line in soup.get_text().splitlines():
     if "PD8GB" in line and line.strip():
         parts = line.split()
-        if len(parts) >= 12:
-            tijd = parts[0] + " " + parts[1]
-            freq = parts[3]
-            snr = parts[4]
-            afstand = parts[10]
-            reporter = parts[8]
-            rows.append((tijd, freq, snr, afstand, reporter))
+        if len(parts) >= 13:
+            tijd = parts[0] + " " + parts[1]          # Datum + Tijd
+            freq = parts[2]                           # Frequentie
+            snr = parts[3]                            # SNR
+            reporter = parts[8]                       # Reporter call
+            rgrid = parts[9]                          # Reporter locator
+            afstand = parts[10]                       # Afstand in km
+            rows.append((tijd, freq, snr, rgrid, afstand, reporter))
 
 # 📝 Genereer HTML-bestand in docs/
 with open("docs/wspr_pd8gb.html", "w") as f:
@@ -38,8 +38,8 @@ with open("docs/wspr_pd8gb.html", "w") as f:
     </style></head><body>
     <h3 style='text-align:center; color:#e74c3c;'>Laatste 50 WSPR spots van PD8GB</h3>
     <table>
-    <tr><th>Tijd (UTC)</th><th>Frequentie</th><th>SNR</th><th>Afstand</th><th>Reporter</th></tr>
+    <tr><th>Tijd (UTC)</th><th>Frequentie</th><th>SNR</th><th>Locatie</th><th>Afstand</th><th>Reporter</th></tr>
     """)
     for row in rows:
-        f.write(f"<tr><td>{row[0]}</td><td>{row[1]}</td><td>{row[2]} dB</td><td>{row[3]} km</td><td>{row[4]}</td></tr>\n")
+        f.write(f"<tr><td>{row[0]}</td><td>{row[1]}</td><td>{row[2]} dB</td><td>{row[3]}</td><td>{row[4]} km</td><td>{row[5]}</td></tr>\n")
     f.write("</table></body></html>")
