@@ -24,8 +24,8 @@ th { background-color: #222; color: #e74c3c; }
 """
 
 for row in reader:
-    html += f"<tr><td>{row['UTC']}</td><td>{row['Freq']}</td><td>{row['SNR']} dB</td><td>{row['km']} km</td><td>{row['Reporter']}</td></tr>\n"
-
+    html += f"<tr><td>{row.get('Date', '—')}</td><td>{row.get('Freq', '—')}</td><td>{row.get('SNR', '—')} dB</td><td>{row.get('km', '—')} km</td><td>{row.get('Reporter', '—')}</td></tr>\n"
+    
 html += "</table><p style='text-align:center; margin-top:20px;'>Data automatisch geladen van WSPRnet.org</p></body></html>"
 
 with open(OUTPUT_FILE, "w", encoding="utf-8") as f:
