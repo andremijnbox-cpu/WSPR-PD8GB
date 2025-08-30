@@ -19,12 +19,12 @@ for line in soup.get_text().splitlines():
     if "PD8GB" in line and line.strip():
         parts = line.split()
         if len(parts) >= 13:
-            tijd      = parts[0] + " " + parts[1]  # Datum + Tijd
-            freq      = parts[2]                   # Frequentie
-            snr       = parts[3]                   # SNR
-            reporter  = parts[8]                   # Reporter callsign
-            locator   = parts[9]                   # Locator van reporter 
-            afstand   = parts[10]                  # Afstand in km
+            tijd      = parts[0] + " " + parts[1]      # Datum + Tijd
+            freq      = parts[2]                       # Frequentie
+            snr       = parts[3]                       # SNR
+            reporter  = parts[8]                       # Reporter callsign
+            locator   = parts[9]                       # Locator van reporter 
+            afstand   = parts[10]                      # Afstand in km
             rows.append((tijd, freq, snr, reporter, locator, afstand))
 
 # 📝 Genereer HTML-bestand in docs/
