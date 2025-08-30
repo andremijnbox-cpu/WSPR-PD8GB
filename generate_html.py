@@ -19,12 +19,12 @@ for line in soup.get_text().splitlines():
     if "PD8GB" in line and line.strip():
         parts = line.split()
         if len(parts) >= 13:
-           tijd      = parts[0] + " " + parts[1]  # Datum + Tijd
-           freq      = parts[2]                   # Frequentie
-           snr       = parts[3]                   # SNR
-           reporter  = parts[8]                   # Reporter callsign
-           locator   = parts[9]                   # Locator van reporter 
-           afstand   = parts[10]                  # Afstand in km
+            tijd      = parts[0] + " " + parts[1]  # Datum + Tijd
+            freq      = parts[2]                   # Frequentie
+            snr       = parts[3]                   # SNR
+            reporter  = parts[8]                   # Reporter callsign
+            locator   = parts[9]                   # Locator van reporter 
+            afstand   = parts[10]                  # Afstand in km
             rows.append((tijd, freq, snr, reporter, locator, afstand))
 
 # 📝 Genereer HTML-bestand in docs/
@@ -38,8 +38,10 @@ with open("docs/wspr_pd8gb.html", "w") as f:
     </style></head><body>
     <h3 style='text-align:center; color:#e74c3c;'>Laatste 50 WSPR spots van PD8GB</h3>
     <table>
-    <tr><th>Tijd (UTC)</th><th>Frequentie</th><th>SNR</th><th>Locatie</th><th>Afstand</th><th>Reporter</th></tr>
+    <tr><th>Tijd (UTC)</th><th>Frequentie</th><th>SNR</th><th>Reporter</th><th>Locatie</th><th>Afstand</th></tr>
     """)
+
     for row in rows:
-        f.write(f"<tr><td>{row[0]}</td><td>{row[1]}</td><td>{row[2]} dB</td><td>{row[3]}</td><td>{row[4]} km</td><td>{row[5]}</td></tr>\n")
+        f.write(f"<tr><td>{row[0]}</td><td>{row[1]}</td><td>{row[2]} dB</td><td>{row[3]}</td><td>{row[4]}</td><td>{row[5]} km</td></tr>\n")
+
     f.write("</table></body></html>")
