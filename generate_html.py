@@ -17,20 +17,16 @@ soup = BeautifulSoup(response.text, 'html.parser')
 rows = []
 for line in soup.get_text().splitlines():
     line = line.strip()
-    if line.startswith("20") and "PD8GB" in line:  # Alleen regels met datum en PD8GB
+    if line.startswith("20") and "PD8GB" in line:
         parts = line.split()
-        if len(parts) >= 11:
-            try:
-                tijd      = parts[0] + " " + parts[1]          # Datum + Tijd
-                freq      = parts[2]                           # Frequentie
-                snr       = parts[3] + " dB"                   # SNR
-                reporter  = parts[8]                           # Reporter callsign
-                locator   = parts[9]                           # Reporter grid
-                afstand   = parts[10] + " km"                  # Afstand
-                rows.append((tijd, freq, snr, reporter, locator, afstand))
-            except Exception as e:
-                print("Fout bij verwerken regel:", line)
-                print("Details:", e)
+        if len(parts) >= 15:
+            tijd      = parts[0] + " " + parts[1]          # Datum + Tijd
+            freq      = parts[3]                           # Frequentie
+            snr       = parts[4] + " dB"                   # SNR
+            reporter  = parts[9]                           # Reporter callsign
+            locator   = parts[10]                          # Reporter grid
+            afstand   = parts[11] + " km"                  # Afstand
+            rows.append((tijd, freq, snr, reporter, locator, afstand))
 
 # 📝 Genereer HTML-bestand in docs/
 with open("docs/wspr_pd8gb.html", "w") as f:
