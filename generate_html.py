@@ -23,9 +23,9 @@ for line in soup.get_text().splitlines():
             freq = parts[2]                           # Frequentie
             snr = parts[3]                            # SNR
             reporter = parts[8]                       # Reporter call
-            rgrid = parts[9]                          # Reporter locator
+            locator = parts[9]                        # Locator van reporter
             afstand = parts[10]                       # Afstand in km
-            rows.append((tijd, freq, snr, rgrid, afstand, reporter))
+            rows.append((tijd, freq, snr, locator, afstand, reporter))
 
 # 📝 Genereer HTML-bestand in docs/
 with open("docs/wspr_pd8gb.html", "w") as f:
