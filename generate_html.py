@@ -16,32 +16,40 @@ soup = BeautifulSoup(response.text, 'html.parser')
 
 rows = []
 for line in soup.get_text().splitlines():
-    if "PD8GB" in line and line.strip():
+    line = line.strip()
+    if line.startswith("20") and "PD8GB" in line:  # Alleen regels met datum en PD8GB
         parts = line.split()
         if len(parts) >= 11:
-            tijd      = parts[0] + " " + parts[1]      # Datum + Tijd
-            freq      = parts[2]                       # Frequentie
-            snr       = parts[3]                       # SNR
-            reporter  = parts[8]                       # Reporter callsign
-            locator   = parts[9]                       # Locator van reporter 
-            afstand   = parts[10]                      # Afstand in km
-            rows.append((tijd, freq, snr, reporter, locator, afstand))
+            try:
+                tijd      = parts[0] + " " + parts[1]          # Datum + Tijd
+                freq      = parts[2]                           # Frequentie
+                snr       = parts[3] + " dB"                   # SNR
+                reporter  = parts[8]                           # Reporter callsign
+                locator   = parts[9]                           # Reporter grid
+                afstand   = parts[10] + " km"                  # Afstand
+                rows.append((tijd, freq, snr, reporter, locator, afstand))
+            except Exception as e:
+                print("Fout bij verwerken regel:", line)
+                print("Details:", e)
 
 # 📝 Genereer HTML-bestand in docs/
 with open("docs/wspr_pd8gb.html", "w") as f:
     f.write("""<html><head>
+    <meta charset="UTF-8">
+    <title>WSPR Spots van PD8GB</title>
     <style>
-    body { background-color: #000; color: #fff; font-family: sans-serif; }
+    body { background-color: #000; color: #fff; font-family: Arial, sans-serif; }
     table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-    th, td { padding: 6px; border-bottom: 1px solid #444; text-align: center; }
+    th, td { padding: 8px; border-bottom: 1px solid #444; text-align: center; }
     th { background-color: #222; color: #e74c3c; }
+    h3 { text-align: center; color: #e74c3c; }
     </style></head><body>
-    <h3 style='text-align:center; color:#e74c3c;'>Laatste 50 WSPR spots van PD8GB</h3>
+    <h3>Laatste 50 WSPR spots van PD8GB</h3>
     <table>
     <tr><th>Tijd (UTC)</th><th>Frequentie</th><th>SNR</th><th>Reporter</th><th>Locatie</th><th>Afstand</th></tr>
     """)
 
     for row in rows:
-        f.write(f"<tr><td>{row[0]}</td><td>{row[1]}</td><td>{row[2]} dB</td><td>{row[3]}</td><td>{row[4]}</td><td>{row[5]} km</td></tr>\n")
+        f.write(f"<tr><td>{row[0]}</td><td>{row[1]}</td><td>{row[2]}</td><td>{row[3]}</td><td>{row[4]}</td><td>{row[5]}</td></tr>\n")
 
     f.write("</table></body></html>")
